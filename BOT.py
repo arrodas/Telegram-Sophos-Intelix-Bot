@@ -31,15 +31,15 @@ def mibot():
                 check_dinamico = minusculas[0:14]
                 foto = minusculas[0:4]
                 if dinamico == 'dinamico':
-                    analisis = open("tipo_analisis", "w+" ) 
+                    analisis = open("tipo_analisis", "r+" ) 
                     analisis.write('dinamico')
                     analisis.close()
-                    return replyMessage('Ahora me tienes que enviar el fichero y te doy un JobID para consultar pasados minutos')
+                    return replyMessage('Ahora me tienes que enviar el fichero y te doy un JobID para consultar pasados minutos su analisis dinamico')
                 elif estatico == 'estatico':
-                    analisis = open("tipo_analisis", "w+" ) 
+                    analisis = open("tipo_analisis", "r+" ) 
                     analisis.write('estatico')
                     analisis.close()
-                    return replyMessage('Ahora me tienes que enviar el fichero y te doy un JobID para consultar pasados minutos')
+                    return replyMessage('Ahora me tienes que enviar el fichero y te doy un JobID para consultar pasados minutos su analisis estatico')
                 elif resumen == 'hash':
                     p = subprocess.check_output('./check_hash.py %s' % text[4:], shell=True)
                     return replyMessage(str(p,'utf-8'))
@@ -64,8 +64,9 @@ def mibot():
                 with open("salida_wget.txt") as json_file:
                     fichero = json.load(json_file)
                 p = subprocess.check_output('wget https://api.telegram.org/file/bot%s/%s -O fichero' % (botID, fichero['result']['file_path']), shell=True)
-                analisis = open("tipo_analisis", "w+" ) 
-                if analisis == 'dinamico':
+                analisis = open("tipo_analisis", "r+" )
+                tipo = analisis.read().rstrip() 
+                if tipo == 'dinamico':
                     p = subprocess.check_output('./sube_dinamico.py fichero', shell=True)
                     analisis.write('')
                     analisis.close()
